@@ -1,0 +1,27 @@
+# Define the root CA certificate (self-signed).
+subject: cn=ca
+---
+# Define a server intermediate CA, issued by the root CA.
+subject: cn=server-sub-ca
+issuer: cn=ca
+ca: true
+---
+# Define a client intermediate CA, also issued by the root CA.
+subject: cn=client-sub-ca
+issuer: cn=ca
+ca: true
+---
+# Define a server certificate, issued by the server intermediate CA.
+subject: cn=test-server
+issuer: cn=server-sub-ca
+sans:
+  - DNS:localhost  # Add localhost as a Subject Alternative Name.
+---
+# Define a client certificate, issued by the client intermediate CA.
+subject: cn=test-client
+issuer: cn=client-sub-ca
+---
+# Define an expired client certificate.
+subject: cn=expired-client
+issuer: cn=client-sub-ca
+not_after: 2020-01-01T00:00:00Z  # Set an expiration date in the past.
